@@ -1,36 +1,219 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# E-commerce Boilerplate
 
-## Getting Started
+A modern full-stack e-commerce boilerplate built with Next.js, NestJS, Prisma, and PostgreSQL.
 
-First, run the development server:
+## Tech Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### Frontend
+- **Next.js 16** - React framework
+- **Tailwind CSS 4** - Utility-first CSS
+- **TypeScript** - Type safety
+
+### Backend
+- **NestJS 11** - Node.js framework
+- **Prisma 7** - Database ORM
+- **PostgreSQL 15** - Database
+
+### DevOps
+- **Docker & Docker Compose** - Containerization
+- **ESLint** - Code linting
+
+## Project Structure
+
+```
+ecommerce-boilerplate/
+├── frontend/          # Next.js frontend application
+├── backend/           # NestJS backend API
+├── specs/             # Project specifications and documentation
+├── agents/            # AI agent definitions
+├── docker-compose.yml # Docker services orchestration
+└── setup.ps1         # Automated setup script
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Quick Start
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Prerequisites
+- [Docker Desktop](https://www.docker.com/products/docker-desktop) installed and running
+- [Node.js 20+](https://nodejs.org/) (for local development)
+- [Git](https://git-scm.com/)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Automated Setup (Recommended)
 
-## Learn More
+Run the setup script in PowerShell:
 
-To learn more about Next.js, take a look at the following resources:
+```powershell
+.\setup.ps1
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This script will:
+- Check Docker status
+- Create environment files
+- Start PostgreSQL database
+- Install backend dependencies
+- Generate Prisma client
+- Run database migrations
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Manual Setup
 
-## Deploy on Vercel
+1. **Create environment files**
+   ```bash
+   # Backend
+   copy backend\.env.example backend\.env
+   
+   # Frontend
+   copy frontend\.env.example frontend\.env
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. **Start database only**
+   ```bash
+   docker-compose up -d db
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3. **Setup Prisma (from backend folder)**
+   ```bash
+   cd backend
+   npm install
+   npx prisma generate
+   npx prisma migrate dev --name init
+   cd ..
+   ```
+
+4. **Start all services**
+   ```bash
+   docker-compose up --build
+   ```
+
+## Development
+
+### Start All Services with Docker
+```bash
+docker-compose up
+```
+
+### Start Individual Services Locally
+
+**Backend:**
+```bash
+cd backend
+npm install
+npm run start:dev
+```
+
+**Frontend:**
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+### Access Points
+- **Frontend:** http://localhost:3000
+- **Backend API:** http://localhost:3001
+- **Database:** localhost:5432
+  - User: `postgres`
+  - Password: `postgres`
+  - Database: `ecommerce`
+
+## Database Management
+
+### View Data with Prisma Studio
+```bash
+cd backend
+npx prisma studio
+```
+
+### Create New Migration
+```bash
+cd backend
+npx prisma migrate dev --name your_migration_name
+```
+
+### Reset Database (Development Only)
+```bash
+cd backend
+npx prisma migrate reset
+```
+
+## Docker Commands
+
+### Build and Start
+```bash
+docker-compose up --build
+```
+
+### Stop Services
+```bash
+docker-compose down
+```
+
+### Stop and Remove Volumes (Clean Slate)
+```bash
+docker-compose down -v
+```
+
+### View Logs
+```bash
+# All services
+docker-compose logs -f
+
+# Specific service
+docker-compose logs -f api
+docker-compose logs -f web
+docker-compose logs -f db
+```
+
+## Database Schema
+
+The boilerplate includes a basic e-commerce schema:
+
+- **Users** - User accounts with roles (USER/ADMIN)
+- **Categories** - Product categories
+- **Products** - Product catalog with inventory
+- **Cart Items** - Shopping cart functionality
+- **Orders** - Order management
+- **Order Items** - Individual order line items
+
+See `backend/prisma/schema.prisma` for the complete schema.
+
+## Project Documentation
+
+Detailed documentation available in the `specs/` folder:
+
+- `product-requirements.md` - Product requirements and features
+- `tech-stacks.md` - Technology stack details
+- `database-api-specifications.md` - API and database design
+- `infrastructure-guide.md` - Infrastructure setup
+- `ci-cd-plan.md` - CI/CD pipeline configuration
+- `style-guide.md` - Code style guidelines
+- `non-functional-requirements.md` - Performance, security, etc.
+- `checklists.md` - Development checklists
+
+## Troubleshooting
+
+### "package.json not found" Error
+- Ensure you're running `docker-compose` from the project root
+- Verify `frontend/package.json` and `backend/package.json` exist
+
+### Prisma Migration Errors
+- Ensure database is running: `docker-compose up -d db`
+- Wait a few seconds for database to initialize
+- Run migrations: `cd backend && npx prisma migrate deploy`
+
+### Port Already in Use
+- Frontend (3000), Backend (3001), or Database (5432) ports may be in use
+- Stop conflicting services or change ports in `docker-compose.yml`
+
+### Docker Build Fails
+- Clear Docker cache: `docker system prune -a`
+- Rebuild: `docker-compose build --no-cache`
+
+## Contributing
+
+1. Create a feature branch
+2. Make your changes
+3. Test thoroughly
+4. Submit a pull request
+
+## License
+
+MIT
