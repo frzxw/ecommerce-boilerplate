@@ -109,6 +109,7 @@ npm run dev
 ### Access Points
 - **Frontend:** http://localhost:3000
 - **Backend API:** http://localhost:3001
+- **API Documentation (Swagger):** http://localhost:3001/api
 - **Database:** localhost:5432
   - User: `postgres`
   - Password: `postgres`
@@ -164,14 +165,18 @@ docker-compose logs -f db
 
 ## Database Schema
 
-The boilerplate includes a basic e-commerce schema:
+The boilerplate includes a comprehensive e-commerce schema:
 
-- **Users** - User accounts with roles (USER/ADMIN)
-- **Categories** - Product categories
-- **Products** - Product catalog with inventory
-- **Cart Items** - Shopping cart functionality
+- **Users** - User accounts with roles (CUSTOMER/ADMIN/SELLER)
+- **Addresses** - User shipping addresses
+- **Categories** - Hierarchical product categories
+- **Products** - Product catalog with variants
+- **Product Variants** - SKU, price, stock for product variations
+- **Articles** - Blog/Content management
+- **Cart** - Shopping cart functionality
 - **Orders** - Order management
-- **Order Items** - Individual order line items
+- **Payments** - Payment tracking (Stripe/Midtrans)
+- **Shipments** - Shipping tracking
 
 See `backend/prisma/schema.prisma` for the complete schema.
 
