@@ -251,6 +251,8 @@ model Order {
   userId      String      @map("user_id")
   addressId   String      @map("address_id")
   totalAmount Decimal     @map("total_amount") @db.Decimal(10, 2)
+  shippingMethod String?  @map("shipping_method")
+  shippingCost Decimal     @default(0) @map("shipping_cost") @db.Decimal(10, 2)
   status      OrderStatus @default(PENDING)
   createdAt   DateTime    @default(now()) @map("created_at")
   updatedAt   DateTime    @updatedAt @map("updated_at")

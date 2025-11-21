@@ -13,6 +13,8 @@ import { PaymentsModule } from './payments/payments.module';
 import { ShipmentsModule } from './shipments/shipments.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { WishlistModule } from './wishlist/wishlist.module';
+import { LocationsModule } from './locations/locations.module';
+import { ShippingModule } from './shipping/shipping.module';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 
@@ -36,6 +38,8 @@ import { APP_GUARD } from '@nestjs/core';
     ShipmentsModule,
     ReviewsModule,
     WishlistModule,
+    LocationsModule,
+    ShippingModule,
   ],
   controllers: [AppController],
   providers: [

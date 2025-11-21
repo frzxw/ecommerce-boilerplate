@@ -7,6 +7,7 @@ import { Marquee } from '@/components/ui/Marquee';
 import { Footer } from '@/components/ui/Footer';
 import Link from 'next/link';
 import Image from 'next/image';
+import { AnimatedSection } from '@/components/ui/AnimatedSection';
 
 export const dynamic = 'force-dynamic';
 
@@ -27,7 +28,7 @@ export default async function Home() {
         <Hero />
 
         {/* Collections Grid */}
-        <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <AnimatedSection className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="relative h-[600px] bg-zinc-100 group overflow-hidden cursor-pointer">
               <Image
@@ -71,10 +72,10 @@ export default async function Home() {
               </div>
             </div>
           </div>
-        </section>
+        </AnimatedSection>
 
         {/* Featured Products */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 border-t border-border">
+        <AnimatedSection className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 border-t border-border">
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
             <div>
               <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2 block">Curated For You</span>
@@ -98,10 +99,10 @@ export default async function Home() {
               ))}
             </div>
           )}
-        </section>
+        </AnimatedSection>
 
         {/* Editorial / Story Section */}
-        <section className="bg-black text-white py-32 px-4">
+        <AnimatedSection className="bg-black text-white py-32 px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl md:text-6xl font-bold tracking-tighter uppercase mb-8">Designed for Longevity</h2>
             <p className="text-lg md:text-xl text-zinc-400 mb-12 leading-relaxed">
@@ -111,7 +112,7 @@ export default async function Home() {
               Read Our Manifesto
             </Link>
           </div>
-        </section>
+        </AnimatedSection>
       </main>
 
       {/* Footer */}

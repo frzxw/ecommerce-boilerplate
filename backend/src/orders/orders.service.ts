@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma, Order, PaymentMethod } from '@prisma/client';
 import { CheckoutDto } from './dto/checkout.dto';
@@ -48,11 +48,37 @@ export class OrdersService {
   }
 
   async createFromCheckout(userId: string, data: CheckoutDto): Promise<Order> {
-    // 1. Create Address
+    if (!data.items?.length) {
+      throw new BadRequestException('Order must contain at least one item');
+    }
 
-    const address: any = await this.prisma.address.create({
+    const normalizedItems: Array<{
+      variantId: string;
+      quantity: number;
+      priceAtOrder: Prisma.Decimal;
+    }> = [];
+    let itemsTotal = 0;
+
+    for (const item of data.items) {
+      const price = Number(item.price ?? 0);
+      itemsTotal += price * item.quantity;
+      normalizedItems.push({
+        variantId: item.variantId,
+        quantity: item.quantity,
+        priceAtOrder: new Prisma.Decimal(price.toFixed(2)),
+      });
+    }
+
+    const resolvedShippingCost = Number(data.shippingCost ?? 0);
+    const shippingCostDecimal = new Prisma.Decimal(resolvedShippingCost.toFixed(2));
+    const computedTotal = new Prisma.Decimal((itemsTotal + resolvedShippingCost).toFixed(2));
+
+    const paymentMethod = data.paymentMethod?.toUpperCase();
+    const isValidMethod = paymentMethod && Object.values(PaymentMethod).includes(paymentMethod as PaymentMethod);
+    const resolvedPaymentMethod = isValidMethod ? (paymentMethod as PaymentMethod) : PaymentMethod.MIDTRANS;
+
+    const address = await this.prisma.address.create({
       data: {
-        userId,
         label: 'Shipping Address',
         recipientName: data.shippingAddress.recipientName,
         phoneNumber: data.shippingAddress.phoneNumber,
@@ -61,33 +87,30 @@ export class OrdersService {
         province: data.shippingAddress.state,
         postalCode: data.shippingAddress.zip,
         country: data.shippingAddress.country,
+        user: { connect: { id: userId } },
+        isDefault: false,
       },
     });
 
-    // 2. Create Order with Items
     const order = await this.prisma.order.create({
       data: {
         userId,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
         addressId: address.id,
-        totalAmount: data.totalAmount,
+        totalAmount: computedTotal,
+        shippingMethod: data.shippingMethod ?? null,
+        shippingCost: shippingCostDecimal,
         status: 'PENDING',
         items: {
-          create: data.items.map((item) => ({
-            variantId: item.variantId,
-            quantity: item.quantity,
-            priceAtOrder: item.price,
-          })),
+          create: normalizedItems,
         },
-      },
+      } as Prisma.OrderUncheckedCreateInput,
       include: { items: true },
     });
 
-    // 3. Create Payment Record
     await this.prisma.payment.create({
       data: {
         orderId: order.id,
-        paymentMethod: PaymentMethod.MIDTRANS,
+        paymentMethod: resolvedPaymentMethod,
         status: 'PENDING',
       },
     });

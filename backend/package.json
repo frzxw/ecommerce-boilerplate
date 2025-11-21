@@ -23,6 +23,7 @@
     "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
+    "@countrystatecity/countries": "^1.0.4",
     "@faker-js/faker": "^10.1.0",
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",

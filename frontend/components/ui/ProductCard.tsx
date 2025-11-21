@@ -1,11 +1,19 @@
+'use client';
+
 import { Product } from '@/lib/types';
 import Link from 'next/link';
 import Image from 'next/image';
 import { WishlistButton } from '@/components/product/WishlistButton';
+import { motion } from 'framer-motion';
 
 interface ProductCardProps {
   product: Product;
 }
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0 },
+};
 
 export function ProductCard({ product }: ProductCardProps) {
   // Get the first variant to display default price and image
@@ -14,7 +22,15 @@ export function ProductCard({ product }: ProductCardProps) {
   const imageUrl = defaultVariant?.imageUrl || 'https://placehold.co/600x800/png';
 
   return (
-    <div className="group block relative">
+    <motion.div
+      className="group block relative"
+      variants={cardVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.45, ease: 'easeOut' }}
+      whileHover={{ y: -6 }}
+    >
       <Link href={`/products/${product.id}`}>
         <div className="relative aspect-[0.75] w-full overflow-hidden bg-gray-100 mb-4">
           <Image
@@ -46,6 +62,6 @@ export function ProductCard({ product }: ProductCardProps) {
         </div>
         <p className="text-xs text-gray-500 line-clamp-1">{product.description}</p>
       </Link>
-    </div>
+    </motion.div>
   );
 }

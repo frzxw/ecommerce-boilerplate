@@ -1,4 +1,12 @@
-import { IsString, IsNotEmpty, IsOptional, IsNumber, ValidateNested, IsArray } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsOptional,
+  IsNumber,
+  ValidateNested,
+  IsArray,
+  Min,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 class ShippingAddressDto {
@@ -65,4 +73,17 @@ export class CheckoutDto {
   @IsString()
   @IsOptional()
   couponCode?: string;
+
+  @IsString()
+  @IsOptional()
+  shippingMethod?: string;
+
+  @IsNumber()
+  @IsOptional()
+  @Min(0)
+  shippingCost?: number;
+
+  @IsString()
+  @IsOptional()
+  customerEmail?: string;
 }
