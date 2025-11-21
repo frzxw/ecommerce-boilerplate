@@ -11,6 +11,8 @@ import { CartModule } from './cart/cart.module';
 import { ArticlesModule } from './articles/articles.module';
 import { PaymentsModule } from './payments/payments.module';
 import { ShipmentsModule } from './shipments/shipments.module';
+import { ReviewsModule } from './reviews/reviews.module';
+import { WishlistModule } from './wishlist/wishlist.module';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 
@@ -32,6 +34,8 @@ import { APP_GUARD } from '@nestjs/core';
     ArticlesModule,
     PaymentsModule,
     ShipmentsModule,
+    ReviewsModule,
+    WishlistModule,
   ],
   controllers: [AppController],
   providers: [

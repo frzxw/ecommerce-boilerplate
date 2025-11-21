@@ -33,7 +33,12 @@ export class ProductsService {
   async findOne(id: string): Promise<Product | null> {
     return this.prisma.product.findUnique({
       where: { id },
-      include: { variants: true, category: true },
+      include: {
+        variants: true,
+        category: true,
+        images: { orderBy: { order: 'asc' } },
+        reviews: { include: { user: { select: { name: true } } } },
+      },
     });
   }
 

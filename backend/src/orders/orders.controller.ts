@@ -9,6 +9,7 @@ import {
   Request,
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
+import { CheckoutDto } from './dto/checkout.dto';
 import { Prisma } from '@prisma/client';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -20,14 +21,12 @@ export class OrdersController {
   @Post()
   create(
     @Request() req: { user: { userId: string } },
-    @Body() createOrderDto: Prisma.OrderCreateInput,
+    @Body() createOrderDto: CheckoutDto,
   ) {
-    // In a real app, we'd probably build the order from the cart or specific DTO
-    // For now, we assume the DTO is passed correctly, but we should override userId from token
-    return this.ordersService.create({
-      ...createOrderDto,
-      user: { connect: { id: req.user.userId } },
-    });
+    return this.ordersService.createFromCheckout(
+      req.user.userId,
+      createOrderDto,
+    );
   }
 
   @UseGuards(AuthGuard('jwt'))

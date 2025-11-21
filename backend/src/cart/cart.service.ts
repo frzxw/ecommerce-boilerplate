@@ -12,7 +12,7 @@ type CartWithItems = Cart & {
 
 @Injectable()
 export class CartService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async findOrCreate(userId: string): Promise<CartWithItems> {
     let cart = await this.prisma.cart.findUnique({
@@ -88,6 +88,21 @@ export class CartService {
 
     return this.prisma.cartItem.delete({
       where: { id: itemId },
+    });
+  }
+
+  async updateItem(userId: string, itemId: string, quantity: number) {
+    const cart = await this.findOrCreate(userId);
+    const item = cart.items.find((i) => i.id === itemId);
+    if (!item) throw new Error('Item not found in cart');
+
+    if (quantity <= 0) {
+      return this.removeItem(userId, itemId);
+    }
+
+    return this.prisma.cartItem.update({
+      where: { id: itemId },
+      data: { quantity },
     });
   }
 }
