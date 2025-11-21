@@ -105,4 +105,14 @@ export class CartService {
       data: { quantity },
     });
   }
+
+  async clearCart(userId: string) {
+    const cart = await this.findOrCreate(userId);
+
+    await this.prisma.cartItem.deleteMany({
+      where: { cartId: cart.id },
+    });
+
+    return { message: 'Cart cleared successfully' };
+  }
 }

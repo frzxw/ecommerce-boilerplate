@@ -29,7 +29,6 @@ function ProductsContent() {
   const searchQuery = searchParams.get('search') || '';
   const minPrice = Number(searchParams.get('minPrice')) || 0;
   const maxPrice = Number(searchParams.get('maxPrice')) || 1000;
-  const inStock = searchParams.get('inStock') === 'true';
 
   // Fetch Categories
   useEffect(() => {
@@ -54,7 +53,6 @@ function ProductsContent() {
         if (searchQuery) params.append('search', searchQuery);
         if (minPrice > 0) params.append('minPrice', minPrice.toString());
         if (maxPrice < 1000) params.append('maxPrice', maxPrice.toString());
-        if (inStock) params.append('inStock', 'true');
 
         const data = await fetchAPI(`/products?${params.toString()}`);
         setProducts(data);
@@ -65,11 +63,11 @@ function ProductsContent() {
       }
     };
     loadProducts();
-  }, [categoryId, searchQuery, minPrice, maxPrice, inStock]);
+  }, [categoryId, searchQuery, minPrice, maxPrice]);
 
   const updateFilters = (newParams: Record<string, string | null>) => {
     const params = new URLSearchParams(searchParams.toString());
-
+    
     Object.entries(newParams).forEach(([key, value]) => {
       if (value === null) {
         params.delete(key);
@@ -84,12 +82,12 @@ function ProductsContent() {
   return (
     <div className="min-h-screen bg-white font-sans">
       <Navbar />
-
+      
       {/* Page Header */}
       <div className="bg-zinc-50 pt-32 pb-16 px-4 border-b border-gray-100">
         <div className="container mx-auto max-w-7xl">
           <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter mb-4">
-            {categoryId
+            {categoryId 
               ? categories.find(c => c.id === categoryId)?.name || 'Collection'
               : 'All Products'}
           </h1>
@@ -102,7 +100,7 @@ function ProductsContent() {
       <div className="container mx-auto max-w-7xl px-4 py-12">
         <div className="flex flex-col md:flex-row gap-12">
           {/* Mobile Filter Toggle */}
-          <button
+          <button 
             className="md:hidden w-full py-4 bg-black text-white text-sm font-bold uppercase tracking-widest mb-4 flex justify-between px-6 items-center"
             onClick={() => setIsFilterOpen(!isFilterOpen)}
           >
@@ -120,8 +118,6 @@ function ProductsContent() {
                 minPrice={minPrice}
                 maxPrice={maxPrice}
                 onPriceChange={(min, max) => updateFilters({ minPrice: min.toString(), maxPrice: max.toString() })}
-                inStockOnly={inStock}
-                onInStockChange={(checked) => updateFilters({ inStock: checked ? 'true' : null })}
               />
             </div>
           </aside>
@@ -133,7 +129,7 @@ function ProductsContent() {
               <span className="text-xs font-bold uppercase tracking-widest text-gray-500">
                 Showing {products.length} Results
               </span>
-
+              
               <div className="w-full sm:w-auto relative">
                 <input
                   type="text"
@@ -166,7 +162,7 @@ function ProductsContent() {
               <div className="text-center py-32 bg-gray-50">
                 <p className="text-xl font-medium mb-2">No products found</p>
                 <p className="text-gray-500 mb-6">Try adjusting your filters or search query.</p>
-                <button
+                <button 
                   onClick={() => router.push('/products')}
                   className="text-xs font-bold uppercase tracking-widest border-b border-black pb-1 hover:opacity-60 transition-opacity"
                 >

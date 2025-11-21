@@ -15,8 +15,6 @@ interface ProductFiltersProps {
   minPrice: number;
   maxPrice: number;
   onPriceChange: (min: number, max: number) => void;
-  inStockOnly: boolean;
-  onInStockChange: (inStock: boolean) => void;
 }
 
 export default function ProductFilters({
@@ -26,8 +24,6 @@ export default function ProductFilters({
   minPrice,
   maxPrice,
   onPriceChange,
-  inStockOnly,
-  onInStockChange,
 }: ProductFiltersProps) {
   const [localMin, setLocalMin] = useState(minPrice);
   const [localMax, setLocalMax] = useState(maxPrice);
@@ -45,10 +41,11 @@ export default function ProductFilters({
           <li>
             <button
               onClick={() => onSelectCategory(null)}
-              className={`text-sm transition-all duration-200 flex items-center gap-2 ${selectedCategory === null
-                ? 'text-black font-bold translate-x-1'
-                : 'text-gray-500 hover:text-black hover:translate-x-1'
-                }`}
+              className={`text-sm transition-all duration-200 flex items-center gap-2 ${
+                selectedCategory === null 
+                  ? 'text-black font-bold translate-x-1' 
+                  : 'text-gray-500 hover:text-black hover:translate-x-1'
+              }`}
             >
               <span className={`w-1.5 h-1.5 rounded-full ${selectedCategory === null ? 'bg-black' : 'bg-transparent border border-gray-300'}`}></span>
               All Products
@@ -58,10 +55,11 @@ export default function ProductFilters({
             <li key={category.id}>
               <button
                 onClick={() => onSelectCategory(category.id)}
-                className={`text-sm transition-all duration-200 flex items-center gap-2 ${selectedCategory === category.id
-                  ? 'text-black font-bold translate-x-1'
-                  : 'text-gray-500 hover:text-black hover:translate-x-1'
-                  }`}
+                className={`text-sm transition-all duration-200 flex items-center gap-2 ${
+                  selectedCategory === category.id 
+                    ? 'text-black font-bold translate-x-1' 
+                    : 'text-gray-500 hover:text-black hover:translate-x-1'
+                }`}
               >
                 <span className={`w-1.5 h-1.5 rounded-full ${selectedCategory === category.id ? 'bg-black' : 'bg-transparent border border-gray-300'}`}></span>
                 {category.name}
@@ -69,34 +67,6 @@ export default function ProductFilters({
             </li>
           ))}
         </ul>
-      </div>
-
-      {/* Availability Filter */}
-      <div>
-        <h3 className="font-bold text-xs uppercase tracking-widest mb-6 pb-2 border-b border-gray-100">Availability</h3>
-        <label className="flex items-center gap-3 cursor-pointer group">
-          <div className="relative">
-            <input
-              type="checkbox"
-              checked={inStockOnly}
-              onChange={(e) => onInStockChange(e.target.checked)}
-              className="peer sr-only"
-            />
-            <div className="w-5 h-5 border border-gray-300 rounded-sm peer-checked:bg-black peer-checked:border-black transition-colors"></div>
-            <svg
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth="3"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-            </svg>
-          </div>
-          <span className={`text-sm transition-colors ${inStockOnly ? 'text-black font-bold' : 'text-gray-500 group-hover:text-black'}`}>
-            In Stock Only
-          </span>
-        </label>
       </div>
 
       {/* Price Filter */}

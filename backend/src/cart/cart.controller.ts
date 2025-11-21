@@ -53,4 +53,10 @@ export class CartController {
   ) {
     return this.cartService.updateItem(req.user.userId, itemId, body.quantity);
   }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Post('clear')
+  clearCart(@Request() req: { user: { userId: string } }) {
+    return this.cartService.clearCart(req.user.userId);
+  }
 }

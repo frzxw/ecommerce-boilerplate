@@ -13,7 +13,7 @@ import { Prisma } from '@prisma/client';
 
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) { }
+  constructor(private readonly productsService: ProductsService) {}
 
   @Post()
   create(@Body() createProductDto: Prisma.ProductCreateInput) {
@@ -26,7 +26,6 @@ export class ProductsController {
     @Query('search') search?: string,
     @Query('minPrice') minPrice?: string,
     @Query('maxPrice') maxPrice?: string,
-    @Query('inStock') inStock?: string,
     @Query('page') page?: string,
     @Query('limit') limit?: string,
   ) {
@@ -55,16 +54,6 @@ export class ProductsController {
             gte: minPrice ? Number(minPrice) : undefined,
             lte: maxPrice ? Number(maxPrice) : undefined,
           },
-        },
-      };
-    }
-
-    if (inStock === 'true') {
-      where.variants = {
-        ...where.variants,
-        some: {
-          ...(where.variants as any)?.some,
-          stock: { gt: 0 },
         },
       };
     }
