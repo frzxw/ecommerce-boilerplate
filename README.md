@@ -1,6 +1,25 @@
 # E-commerce Boilerplate
 
-A modern full-stack e-commerce boilerplate built with Next.js, NestJS, Prisma, and PostgreSQL.
+A full-stack e-commerce starter built with Next.js, NestJS, Prisma and PostgreSQL: a storefront, a REST API that
+covers the whole order flow, and Docker for everything.
+
+## What is included
+
+**API** (NestJS 11, 16 Prisma models, OpenAPI docs via Swagger):
+
+| Area | Modules |
+| --- | --- |
+| Catalogue | products, categories, reviews, wishlist |
+| Buying | cart, coupons, promotions, orders, payments |
+| Delivery | addresses, locations, shipping, shipments |
+| Accounts | auth (JWT with Passport, bcrypt), users |
+| Content | articles |
+
+Requests are validated with class-validator and rate-limited with the NestJS throttler. Seed data comes from Faker.
+
+**Storefront** (Next.js 16, Tailwind CSS 4): home, product list and detail, checkout with a success page, account,
+login and register, a journal (blog) with article pages, about, contact, and policy pages (privacy, terms, shipping and
+returns, size guide).
 
 ## Tech Stack
 
